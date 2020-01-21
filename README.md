@@ -1,1 +1,0 @@
-java-spring-dubbo-consumer

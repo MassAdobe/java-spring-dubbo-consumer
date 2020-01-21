@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+    <springProperty scope="context" name="LOG_HOME" source="logging.fileLocation" defaultValue="/usr/local/data/logs"/>
+    <springProperty scope="context" name="LOG_FILE_NAME" source="spring.application.name"
+                    defaultValue="massadobe-attempt-dubbo"/>
+    <springProperty scope="context" name="LOG_MARK" source="logging.mark" defaultValue="1"/>
+    <!-- 控制台输出 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <!-- 按照每天生成日志文件 -->
+    <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <fileNamePattern>
+                ${LOG_HOME}/${LOG_FILE_NAME}/${LOG_MARK}/serverLogs/server.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <!--日志文件保留天数-->
+            <maxHistory>7</maxHistory>
+            <!--日志总保存量-->
+            <totalSizeCap>1GB</totalSizeCap>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!--文件到达最大512MB时会被压缩和切割-->
+                <maxFileSize>512MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <!--打印Mybatis数据库执行SQL语句-->
+    <appender name="MyBatis" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- <file>${LOG_HOME}/${LOG_FILE_NAME}/${LOG_MARK}/dblogs/mybatis-sql.log</file>-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>
+                ${LOG_HOME}/${LOG_FILE_NAME}/${LOG_MARK}/dbLogs/db.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <maxHistory>7</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!--文件到达最大512MB时会被压缩和切割-->
+                <maxFileSize>512MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%thread|%d{yyyy-MM-dd HH:mm:ss.SSS}|%level|%logger{36}|%m%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <logger name="mybatis.sql" level="DEBUG">
+        <appender-ref ref="MyBatis"/>
+    </logger>
+
+    <!-- 日志输出级别 -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="RollingFile"/>
+        <appender-ref ref="MyBatis"/>
+    </root>
+</configuration>

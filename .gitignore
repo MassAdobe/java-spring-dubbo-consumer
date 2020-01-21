@@ -1,0 +1,24 @@
+
+\.idea/
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+*.iml
+### IntelliJ IDEA ###
+rebel.xml
+.idea/
+### MAC ###
+.DS_Store
+### Other ###
+logs/
+temp/
+target/
+LOG_HOME_IS_UNDEFINED/
+common-attempt-dubbo/common-attempt-dubbo.iml
+spring-attempt-dubbo/spring-attempt-dubbo.iml
+massadobe-attempt-dubbo.iml
+
